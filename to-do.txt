@@ -1,6 +1,0 @@
-1. Customizable model, temperature, max tokens, chance of each persona responding, global chance of api call per x time, how often to strip input 
-    and run response chance, most recent x memories (max_entries)
-
-2. Generate personas if none exist on startup
-
-3. Write llm responses to file
