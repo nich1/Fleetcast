@@ -14,6 +14,9 @@ ENV/
 .env.local
 .env.*.local
 
+# To do file
+to-do.txt
+
 # IDE
 .vscode/
 .idea/
