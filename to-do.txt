@@ -1,4 +1,0 @@
-2. Max delay time per chunk. When 3-4 personas trigger api requests, add a max duration and min duration delay between messages so they don't
-    all come in at once every time. More natural chat generation
-
-4. Write llm responses to file
