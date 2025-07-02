@@ -3,6 +3,22 @@ import random
 from datetime import datetime
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
+from persona_generation import generate_personas
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL_NAME")
+SELECTION_CHANCE = os.getenv("SELECTION_CHANCE")
+DECISION_CHANCE = os.getenv("DECISION_CHANCE")
+TEMPERATURE = os.getenv("TEMPERATURE")
+MAX_TOKENS = os.getenv("MAX_TOKENS")
+MIN_DELAY = os.getenv("MIN_DELAY")
+MAX_DELAY = os.getenv("MAX_DELAY")
+
+
+
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
@@ -13,22 +29,19 @@ conversation_memory = []
 def load_personas():
     """Load personas from persona.json file"""
     try:
+        if os.path.exists('persona.json') and os.path.getsize('persona.json') == 0:
+            print("persona.json is empty. Generating personas.")
+            personas = generate_personas()
+            with open('persona.json', 'w') as f:
+                json.dump(personas, f, indent=4)
+            return personas
+
         with open('persona.json', 'r') as f:
             return json.load(f)
+
     except FileNotFoundError:
         print("persona.json not found. Using default personas.")
-        return {
-            "personas": [
-                {
-                    "name": "Assistant",
-                    "description": "A helpful AI assistant"
-                },
-                {
-                    "name": "Philosopher",
-                    "description": "A thoughtful philosopher"
-                }
-            ]
-        }
+        return generate_personas()
 
 def load_system_prompts():
     """Load system prompts from systemprompt.json file"""
@@ -49,14 +62,14 @@ def select_active_personas(personas_data):
     
     active_personas = []
     for persona in personas:
-        if random.random() < 0.4:  # 40% chance for each persona
+        if random.random() < SELECTION_CHANCE:  # % chance for each persona
             active_personas.append(persona)
     
     return active_personas
 
 def make_decision():
-    """Make a decision with 40% chance of returning True"""
-    return random.random() < 0.4
+    """Make a decision with % chance of returning True"""
+    return random.random() < DECISION_CHANCE
 
 def add_to_conversation_memory(speaker, text):
     """Add to conversation memory in the format [TIME] speaker: text"""
@@ -102,10 +115,10 @@ def api_call(text):
             
             # Make OpenAI API call
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",  # or "gpt-4" if you prefer
+                model= OPENAI_MODEL,
                 messages=messages,
-                max_tokens=75,
-                temperature=0.9
+                max_tokens=MAX_TOKENS,
+                temperature=TEMPERATURE
             )
             
             # Extract response text
@@ -121,7 +134,7 @@ def api_call(text):
         add_to_conversation_memory("System", f"Error occurred: {str(e)}")
 
 def on_text_received(text):
-    """Triggered every 30 seconds with transcribed text"""
+    """Triggered every X seconds with transcribed text"""
     # You can process the transcribed text here
     # For example, save to file, send to API, etc.
     print(f"Received text: {text}")
@@ -130,7 +143,7 @@ def on_text_received(text):
     add_to_conversation_memory("User", text)
     
     # Make decision (Say something in chat)
-    # 40% chance true
+    # % chance true
     if make_decision():
         print("Decision made: Making API call")
         api_call(text)

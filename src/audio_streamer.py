@@ -3,10 +3,12 @@ import time
 import wave
 import tempfile
 import os
+from dotenv import load_dotenv
 
 import pyaudio
 import speech_recognition as sr
 
+AUDIO_PROCESS_SECONDS =os.getenv("AUDIO_PROCESS_SECONDS")
 
 class AudioStreamer:
     def __init__(self, config, text_callback=None):
@@ -132,14 +134,14 @@ class AudioStreamer:
                 pass
     
     def _process_audio(self):
-        """Process audio data every 10 seconds."""
+        """Process audio data every X seconds."""
         last_process_time = time.time()
         
         while self.is_streaming:
             current_time = time.time()
             
-            # Process every 10 seconds
-            if current_time - last_process_time >= 10:
+            # Process every X seconds
+            if current_time - last_process_time >= AUDIO_PROCESS_SECONDS:
                 self._convert_to_text()
                 last_process_time = current_time
             
