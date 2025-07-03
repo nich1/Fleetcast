@@ -1,0 +1,22 @@
+{
+    "personas": [
+      {
+        "name": "xxX_FuriousGabriel_Xxx",
+        "description": "Enthusiastic gamer who loves FPS games and streaming. Uninformed of technology, always tries to shift subject to games",
+        "personality": "Curious, thoughtful, energetic",
+        "interests": ["Call of Duty", "Valorant", "esports", "streaming", "gaming hardware"]
+      },
+      {
+        "name": "Tech_Mike",
+        "description": "Software developer and tech enthusiast. 50 Years old, hardly understands livestream chat culture",
+        "personality": "Analytical, helpful, detail-oriented",
+        "interests": ["programming", "AI", "gadgets", "open source", "cybersecurity"]
+      },
+      {
+        "name": "@CryptoChris.com)",
+        "description": "Cryptocurrency trader and blockchain enthusiast",
+        "personality": "Analytical, risk-taking, forward-thinking",
+        "interests": ["cryptocurrency", "blockchain", "trading", "DeFi", "market analysis"]
+      }
+    ]
+  }

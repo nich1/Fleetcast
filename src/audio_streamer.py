@@ -8,7 +8,9 @@ from dotenv import load_dotenv
 import pyaudio
 import speech_recognition as sr
 
-AUDIO_PROCESS_SECONDS =os.getenv("AUDIO_PROCESS_SECONDS")
+AUDIO_PROCESS_SECONDS = float(os.getenv("AUDIO_PROCESS_SECONDS", "20"))
+USERNAME = os.getenv("SPEAKER_USERNAME", "User")
+
 
 class AudioStreamer:
     def __init__(self, config, text_callback=None):
@@ -176,7 +178,7 @@ class AudioStreamer:
                         audio = self.recognizer.record(source)
                         text = self.recognizer.recognize_google(audio)
                         
-                        print(f"User: {text}")
+                        print(f"{USERNAME}: {text}")
                         
                         # Call callback if provided
                         if self.text_callback:
